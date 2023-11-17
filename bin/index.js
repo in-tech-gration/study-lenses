@@ -100,29 +100,9 @@ if (isDemo) {
   process.on('SIGUSR2', clearBackup.bind(null, { exit: true }));
 }
 
-const pathToStudy =
-  userArgs.find((entry) => entry[0] !== '-' && entry[1] !== '-') || '';
-// todo
-//   search process.argv for "-h"
-//     log a little guide to the console
-//   allow users to pass a port
-
-// subsequent arguments can be interpreted as plugins to apply, overriding the default
-//  $ study ./path/file.js format highlight
-// futurer things might be like:
-//  $ study ./path/file.js format highlight -o new-file.js
+const pathToStudy = userArgs.find((entry) => entry[0] !== '-' && entry[1] !== '-') || '';
 
 const absPathToStudy = path.join(process.cwd(), pathToStudy);
-// const absPathToStudy = userArgs.includes("--sandbox")
-//   ? path.join(__dirname, "..", "sandbox")
-//   : path.join(process.cwd(), pathToStudy);
-
-// // should you be allowed to open to a 404 path?
-// //  it won't hurt anything, it'll just be a 404 page
-// const isValidPath = fs.existsSync(absPathToStudy);
-// if (!isValidPath) {
-//   throw new Error(pathToStudy + ': is not a valid path');
-// };
 
 const defaultLenses = config.locals['--defaults'];
 const defaultLense =
@@ -200,11 +180,4 @@ require('../server/index.js')(port).then((_) => {
   ) {
     open(url);
   }
-  // if (config.locals["--help"]) {
-  //   setTimeout(() => open(helpUrl), 200);
-  // }
 });
-
-/*
-  go to ../server/index.js for the next step in your journey
-*/
