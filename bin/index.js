@@ -12,40 +12,6 @@ const config = require('config');
 const { copyDir } = require('../server/lib/copyDir');
 const { emptyDir } = require('../server/lib/emptyDir');
 
-// Check for CLI params:
-const { argv } = process; 
-const param    = argv[2];
-// --version, -v
-const isVersionParam = Boolean( 
-  param 
-  && 
-  ( 
-    param === "--version" 
-    || 
-    param === "-v" 
-  )
-);
-// --no-open, -n
-const isNoOpenParam = Boolean( 
-  param 
-  && 
-  ( 
-    param === "--no-open" 
-    || 
-    param === "-n" 
-  )
-);
-
-if ( isVersionParam ){
-
-  const packageJSON = require('../package.json');
-
-  console.log("v" + packageJSON.version);
-  process.exit();
-
-}
-
-
 let rootStudyConfig = {};
 // hack: prefer lenses.json
 try {
@@ -64,6 +30,28 @@ try {
 */
 const userArgs = process.argv.slice(2);
 // use the first arg that doesn't match a port config
+
+// Check for CLI params:
+const param    = userArgs;
+// --version, -v
+const isVersionParam = Boolean( 
+  param 
+  && 
+  ( 
+    param[0] === "--version" 
+    || 
+    param[0] === "-v" 
+  )
+);
+if ( isVersionParam ){
+
+  const packageJSON = require('../package.json');
+
+  console.log("v" + packageJSON.version);
+  process.exit();
+
+}
+
 
 config.demo = null;
 // is this a demo run?
@@ -210,9 +198,6 @@ require('../server/index.js')(port).then((_) => {
       )
     )
   ) {
-    if ( isNoOpenParam ){
-      return;
-    }
     open(url);
   }
   // if (config.locals["--help"]) {
