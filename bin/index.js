@@ -12,9 +12,10 @@ const config = require('config');
 const { copyDir } = require('../server/lib/copyDir');
 const { emptyDir } = require('../server/lib/emptyDir');
 
-// Check for CLI params: --version, -v
+// Check for CLI params:
 const { argv } = process; 
 const param    = argv[2];
+// --version, -v
 const isVersionParam = Boolean( 
   param 
   && 
@@ -22,6 +23,16 @@ const isVersionParam = Boolean(
     param === "--version" 
     || 
     param === "-v" 
+  )
+);
+// --no-open, -n
+const isNoOpenParam = Boolean( 
+  param 
+  && 
+  ( 
+    param === "--no-open" 
+    || 
+    param === "-n" 
   )
 );
 
@@ -199,6 +210,9 @@ require('../server/index.js')(port).then((_) => {
       )
     )
   ) {
+    if ( isNoOpenParam ){
+      return;
+    }
     open(url);
   }
   // if (config.locals["--help"]) {
