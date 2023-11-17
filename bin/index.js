@@ -2,16 +2,38 @@
 
 /* this file is the entry point when launching `study` from the CLI */
 
-const fs = require('fs');
-const path = require('path');
-
-const open = require('open');
+const fs          = require('fs');
+const path        = require('path');
+const open        = require('open');
 
 process.env['NODE_CONFIG_DIR'] = path.join(__dirname, '..', 'config');
 
 const config = require('config');
 const { copyDir } = require('../server/lib/copyDir');
 const { emptyDir } = require('../server/lib/emptyDir');
+
+// Check for CLI params: --version, -v
+const { argv } = process; 
+const param    = argv[2];
+const isVersionParam = Boolean( 
+  param 
+  && 
+  ( 
+    param === "--version" 
+    || 
+    param === "-v" 
+  )
+);
+
+if ( isVersionParam ){
+
+  const packageJSON = require('../package.json');
+
+  console.log("v" + packageJSON.version);
+  process.exit();
+
+}
+
 
 let rootStudyConfig = {};
 // hack: prefer lenses.json
