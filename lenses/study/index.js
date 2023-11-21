@@ -140,33 +140,40 @@ const studyLens = async ({
 <body>
 
   <section>
-    <div class="dropdown">
-      <strong><code>&#187; OPTIONS &#171;</code></strong>
-      <div class='dropdown-content'>
-        <div class='selection-buttons'>
-          <a href='?--help' target='_blank'><code>--help</code>!  what is this?</a>
-          <a href='?--js' target='_blank'><button>javascript</button></a>
-          <a href='?--html' target='_blank'><button>html</button></a>
-          <a href='?--draw' target='_blank'><button>sketch pad</button></a>
+
+    <div class="dropdown-wrapper">
+  
+      <div class="btn-simple dropdown">
+        <strong><code>OPTIONS</code></strong>
+        <div class='dropdown-content'>
+          <div class='selection-buttons'>
+            <a href='?--help' target='_blank'><code>--help</code>!  what is this?</a>
+            <a href='?--js' target='_blank'><button>javascript</button></a>
+            <a href='?--html' target='_blank'><button>html</button></a>
+            <a href='?--draw' target='_blank'><button>sketch pad</button></a>
+          </div>
+          <div>
+            | <a href='https://pythontutor.com/live.html#mode=edit' target='_blank'>tutor</a>
+            | <a href='?--repl' target='_blank'>repl</a>
+            | <a href='?--turtle' target='_blank'>turtle</a>
+            | <a href='?--p5' target='_blank'>p5</a>
+            |
+          </div>
+          <br>
+          ${await typeView.configOptions()}
+          <hr />
+          <a href='?--docs' target='_blank'><code>--docs</code></a> - version ${
+            config.version
+          }
         </div>
-        <div>
-          | <a href='https://pythontutor.com/live.html#mode=edit' target='_blank'>tutor</a>
-          | <a href='?--repl' target='_blank'>repl</a>
-          | <a href='?--turtle' target='_blank'>turtle</a>
-          | <a href='?--p5' target='_blank'>p5</a>
-          |
-        </div>
-        <br>
-        ${await typeView.configOptions()}
-        <hr />
-        <a href='?--docs' target='_blank'><code>--docs</code></a> - version ${
-          config.version
-        }
       </div>
+
+      <span class="btn-simple help-button" style="float: right;">
+        <a href='?--help' target='_blank'>HELP: What is this?</a>
+      </span>
+
     </div>
-
-    <span class="help-button" style="float: right;">&#187; <a href='?--help' target='_blank'>Help!  What is this?</a> &#171;</span>
-
+  
     ${await typeView.panel()}
   </section>
   <main class="main-container">

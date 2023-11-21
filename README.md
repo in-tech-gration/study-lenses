@@ -222,7 +222,9 @@
 
   - The `canvas` module produces errors in various system setups. Under investigation.
 
-## Todo
+## Development 
+
+  **Todo:**
 
   - When the command is run with `-h` log a little guide to the console
 
@@ -236,5 +238,18 @@
 
   - Add online demo and deployed version and include the following section in the README intro: `Explore a live demo [right here](URL)`
 
+  ---
 
-   
+  **Quick start:**
+
+  - _How do I start lenses2 without automatically opening up the browser?_
+    - Just add the `-no-open` parameter at the end: `lenses2 path -no-open`
+
+  - _How do I change the styling?_
+    - Update the following file: `static/theme.css`
+
+  - _How do I change the main HTML structure (head, etc.)?_
+    - There are many place where you'll need to update the code, since there are multiple templates at the moment for various pages:
+      - `lenses/study/views/code.js`
+      - `options/--help/render-main-guide.js`
+      - `options/--help/render-plugin-guide.js`
