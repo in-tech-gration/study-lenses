@@ -1,15 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap');
+
+:root {
+  --max-width: 1000px;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   background: lightgray;
 }
 
-main.main-container > main.markdown-body {
-  max-width: 1000px;
+main.main-container>main.markdown-body {
+  max-width: var(--max-width);
   margin: 0 auto;
   background: white;
   padding: 1rem 2rem;
   border: 2px solid black;
   box-shadow: 0 0 32px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
 }
 
 ul#directory {
@@ -23,20 +31,29 @@ ul#directory {
   box-shadow: 0 20px 16px #00000020;
 }
 
+.btn-simple {
+  color: black;
+  padding: 0.5rem 2rem;
+  border-radius: 16px;
+  transition: all 200ms ease;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
 /* HELP */
 .help-button {
   background: darkorange;
   color: black;
-  padding: 0.2rem 1rem;
-  font-family: sans-serif;
-  border-radius: 16px;
-  transition: all 200ms ease;
 }
+
 .help-button:hover {
   background: orange;
 }
+
 .help-button a {
   color: black;
+  text-decoration: none;
+  font-weight: 600;
 }
 
 /* SEARCH */
@@ -44,14 +61,17 @@ ul#directory {
   margin: 0 auto;
   background: #f0f0f0;
   padding: 0.5rem 2rem 0.5rem 0.7rem;
-  width: 50%;
+  max-width: var(--max-width);
   border-radius: 36px;
   font-family: sans-serif;
   border: 1px solid gray;
+  box-sizing: border-box;
 }
+
 .panel__search-form input {
   font-size: 1rem;
 }
+
 .panel__search-form #search-input {
   padding: 0.25rem 1rem;
   border-radius: 16px;
@@ -59,6 +79,7 @@ ul#directory {
   border-width: 1px;
   width: 20rem;
 }
+
 .panel__search-form #search-button {
   padding: 0.2rem 2rem;
   border-radius: 36px;
@@ -88,4 +109,100 @@ body.markdown-body {
 
 .code-toolbar {
   margin-bottom: 1rem;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  font-family: 'Poppins', sans-serif;
+}
+
+.dropdown-wrapper {
+  display: flex;
+  justify-content: space-between;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.dropdown {
+  background: skyblue;
+}
+
+/* FORM CHECKBOX STYLING: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_custom_checkbox */
+/* The container */
+.checkmark-container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkmark-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.checkmark-container:hover input~.checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkmark-container input:checked~.checkmark {
+  /* background-color: #2196F3; */
+  background-color: forestgreen;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.checkmark-container input:checked~.checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkmark-container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.dropdown-section {
+  font-weight: bold;
+  margin: 1rem 0;
+  border-bottom: 2px solid darkseagreen;
+  padding-bottom: 0.5rem;
 }

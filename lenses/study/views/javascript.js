@@ -77,113 +77,61 @@ class JavaScriptSSR extends CodeSSR {
     );
   }
 
+  renderOptionForm({ key, title }){
+
+    let checked = this.config.locals[key] ? 'checked' : '';
+    if ( key === "run" || key === "debug" ){
+      if ( this.config.locals.eval ){
+        checked = "checked";
+      }
+    }
+
+    return `
+      <form>
+        <label class="checkmark-container" for='${key}-input'>${ title ? title : key}
+          <input id='${key}-input' type='checkbox' ${checked} /> 
+          <span class="checkmark"></span>
+        </label>
+      </form>
+    `
+  }
+
   configOptions() {
     const superConfigOptions = super.configOptions();
     return `
 
-    -- static --
-    <form>
-      <input id='variables-input' type='checkbox' ${
-        this.config.locals.variables ? 'checked' : ''
-      } /> <label for='variables-input'>variables</label>
-    </form>
-    <form>
-      <input id='flowchart-input' type='checkbox' ${
-        this.config.locals.flowchart ? 'checked' : ''
-      } /> <label for='flowchart-input'>flowchart</label>
-    </form>
-    <form>
-      <input id='blanks-input' type='checkbox' ${
-        this.config.locals.blanks ? 'checked' : ''
-      } /> <label for='blanks-input'>blanks</label>
-    </form>
-    <form>
-      <input id='writeme-input' type='checkbox' ${
-        this.config.locals.writeme ? 'checked' : ''
-      } /> <label for='writeme-input'>writeme</label>
-    </form>
-    <form>
-      <input id='ask-input' type='checkbox' ${
-        this.config.locals.ask ? 'checked' : ''
-      } /> <label for='ask-input'>ask me</label>
-    </form>
-    <form>
-      <input id='pseudo-input' type='checkbox' ${
-        this.config.locals.pseudo ? 'checked' : ''
-      } /> <label for='pseudo-input'>pseudo code</label>
-    </form>
+    <div class="dropdown-section">static</div>
+    ${this.renderOptionForm({ key: "variables" })}
+    ${this.renderOptionForm({ key: "flowchart" })}
+    ${this.renderOptionForm({ key: "blanks" })}
+    ${this.renderOptionForm({ key: "writeme" })}
+    ${this.renderOptionForm({ key: "ask", title: "ask me" })}
+    ${this.renderOptionForm({ key: "pseudo", title: "pseudo code" })}
+
     ${superConfigOptions}
-    <form>
-      <input id='deps-input' type='checkbox' ${
-        this.config.locals.deps ? 'checked' : ''
-      } /> <label for='deps-input'>dependencies</label>
-    </form>
-    <form>
-      <input id='eslint-input' type='checkbox' ${
-        this.config.locals.eslint ? 'checked' : ''
-      } /> <label for='eslint-input'>eslint</label>
-    </form>
-    <form>
-      <input id='ast-input' type='checkbox' ${
-        this.config.locals.ast ? 'checked' : ''
-      } /> <label for='ast-input'>syntax tree</label>
-    </form>
+
+    ${this.renderOptionForm({ key: "deps", title: "dependencies" })}
+    ${this.renderOptionForm({ key: "eslint" })}
+    ${this.renderOptionForm({ key: "ast", title: "syntax tree" })}
+
     <br>
-    -- dynamic --
-    <form>
-      <input id='run-input' type='checkbox' ${
-        this.config.locals.run || this.config.locals.eval ? 'checked' : ''
-      } /> <label for='run-input'>run</label>
-    </form>
-    <form>
-      <input id='debug-input' type='checkbox' ${
-        this.config.locals.debug || this.config.locals.eval ? 'checked' : ''
-      } /> <label for='debug-input'>debug</label>
-    </form>
-    <form>
-      <input id='table-input' type='checkbox' ${
-        this.config.locals.table ? 'checked' : ''
-      } /> <label for='table-input'>trace table</label>
-    </form>
-    <form>
-      <input id='trace-input' type='checkbox' ${
-        this.config.locals.trace ? 'checked' : ''
-      } /> <label for='trace-input'>trace button</label>
-    </form>
-    <form>
-      <input id='open-in-input' type='checkbox' ${
-        this.config.locals.openIn ? 'checked' : ''
-      } /> <label for='open-in-input'>open in ...</label>
-    </form>
-    <form>
-      <input id='p5-input' type='checkbox' ${
-        this.config.locals.p5 ? 'checked' : ''
-      } /> <label for='p5-input'>p5</label>
-    </form>
+    <div class="dropdown-section">dynamic</div>
+    ${this.renderOptionForm({ key: "run" })}
+    ${this.renderOptionForm({ key: "debug" })}
+    ${this.renderOptionForm({ key: "table", title: "trace table" })}
+    ${this.renderOptionForm({ key: "trace", title: "trace button" })}
+    ${this.renderOptionForm({ key: "openIn", title: "open in ..." })}
+    ${this.renderOptionForm({ key: "p5" })}
+    
     <br>
-    -- helpful things --
-    <form>
-      <input id='loop-guard-input' type='checkbox' ${
-        this.config.locals.loopGuard ? 'checked' : ''
-      } /> <label for='loop-guard-input'>loop guard</label>
-    </form>
-    <form>
-      <input id='environment-input' type='checkbox' ${
-        this.config.locals.environment ? 'checked' : ''
-      } /> <label for='environment-input'>environment</label>
-    </form>
-    <form>
-      <input id='tests-input' type='checkbox' ${
-        this.config.locals.tests ? 'checked' : ''
-      } /> <label for='tests-input'>tests</label>
-    </form>
-    <form>
-      <input id='clear-scheduled-input' type='checkbox' ${
-        this.config.locals.clearScheduled ? 'checked' : ''
-      } /> <label for='clear-scheduled-input'>clear scheduled</label>
-    </form>
+    <div class="dropdown-section">helpful things</div>
+    ${this.renderOptionForm({ key: "loopGuard", title: "loop guard" })}
+    ${this.renderOptionForm({ key: "environment" })}
+    ${this.renderOptionForm({ key: "tests" })}
+    ${this.renderOptionForm({ key: "clearScheduled", title: "clear scheduled" })}
+
     <br>
-    -- save configs --
+    <div class="dropdown-section">save configs</div>
     <button id='download-config'>download</button>
     <button id='copy-config'>copy</button>
     `;

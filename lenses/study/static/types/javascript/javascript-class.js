@@ -113,7 +113,7 @@ export class JavaScriptFE extends CodeFE {
       ? this.config.locals.loopGuard.active
       : false;
     document
-      .getElementById('loop-guard-input')
+      .getElementById('loopGuard-input')
       .addEventListener('change', (event) => {
         if (event.target.checked) {
           this.config.locals.loopGuard.active = lastActiveValue;
@@ -159,7 +159,7 @@ export class JavaScriptFE extends CodeFE {
       'clear-scheduled-button',
     );
     document
-      .getElementById('clear-scheduled-input')
+      .getElementById('clearScheduled-input')
       .addEventListener('change', (event) => {
         if (event.target.checked) {
           clearScheduledButton.style = 'display: inline-block;';
@@ -467,7 +467,7 @@ export class JavaScriptFE extends CodeFE {
     // if (this.config.locals.openIn) {
     const openInContainer = document.getElementById('open-in-container');
     document
-      .getElementById('open-in-input')
+      .getElementById('openIn-input')
       .addEventListener('change', (event) => {
         this.config.locals.openIn = !this.config.locals.openIn;
         if (event.target.checked) {

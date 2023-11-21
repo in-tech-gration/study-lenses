@@ -24,9 +24,12 @@ class CodeSSR {
   configOptions() {
     return `
       <form class="diff-form">
-        <input id='diff-input' type='checkbox' ${
-          this.config.locals.diff ? 'checked' : ''
-        } /> <label for='diff-input'>diff</label>
+        <label class="checkmark-container" for='diff-input'>diff
+          <input id='diff-input' type='checkbox' ${
+            this.config.locals.diff ? 'checked' : ''
+          } /> 
+          <span class="checkmark"></span>
+        </label>
       </form>`;
   }
 
