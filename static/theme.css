@@ -19,6 +19,9 @@ main.main-container>main.markdown-body {
   box-shadow: 0 0 32px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
 }
+main.markdown-body summary h3 {
+  display: inline-block;
+}
 
 ul#directory {
   float: left;
