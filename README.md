@@ -1,3 +1,5 @@
+![](./assets/lenses2.chip.jpg)
+
 # Study Lenses
 
 a tool to add new perspectives and layers of interactivity on top of existing
