@@ -6,10 +6,12 @@ export const style = `
     border: 1px solid black;
   }
   th {
-    background-color: white;
+    background-color: slateblue;
+    color: white;
   }
   table {
     border-collapse: collapse;
+    margin-bottom: 0.5rem;
   }
   .line-number {
     width: 3em;
@@ -23,10 +25,30 @@ export const style = `
   #close-button {
     float: left;
   }
+  .trace-table__btn {
+    font-weight: bold;
+    font-size: 1.3rem;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    border: none;
+    transition: all 200ms ease;
+    opacity: 0.9;
+  }
+  .trace-table__btn:hover {
+    filter: saturate(0.75);
+    opacity: 1;
+  }
+  #add-row {
+    background: yellowgreen;
+  }
+  #remove-row {
+    background: tomato;
+  }
 </style>`;
 
 export const table = `
-<div>
+<div class="trace-table-wrapper">
   <table>
     <tbody id="table-body">
       <tr>
@@ -39,8 +61,8 @@ export const table = `
     </tbody>
   </table>
 
-  <button id="add-row">+</button>
-  <button id="remove-row">-</button>
+  <button class="trace-table__btn" id="add-row">+</button>
+  <button class="trace-table__btn" id="remove-row">-</button>
 </div>`;
 
 export const init = (shadow) => {

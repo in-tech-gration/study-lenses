@@ -209,3 +209,12 @@ body.markdown-body {
   border-bottom: 2px solid darkseagreen;
   padding-bottom: 0.5rem;
 }
+
+/* TRACE TABLE */
+trace-table {
+  background: whitesmoke;
+  padding: 1rem;
+  border: 4px solid slateblue;
+  box-shadow: 6px 6px 16px rgba(0,0,0,0.7);
+  cursor: move;
+}
