@@ -238,6 +238,8 @@
 
   - Add online demo and deployed version and include the following section in the README intro: `Explore a live demo [right here](URL)`
 
+  - Allow the use of a configuration file that enables more CLI options. For example, the `lenses2` command would read a config file (e.g. `lenses2.config.js`), and make use of a shorthand for opening each week's material: `lenses2 7`. This would read the current day, and open the material for Week 7, and current day, through the use of the lenses subfolder of course.
+
   ---
 
   **Quick start:**

@@ -167,17 +167,27 @@ const url = `http://localhost:${port}/${pathToOpen}${queryMarker}${
 const helpUrl = `http://localhost:${port}?--help`;
 
 // launch the server
+const serverPromiseCloser = require('../server/index.js');
 
-require('../server/index.js')(port).then((_) => {
+serverPromiseCloser(port)
+.then(() => {
+
   console.log('studying: ', url);
-  if (
-    !(
-      userArgs.find((entry) => entry.includes('-no-open')) ||
-      Object.keys(rootStudyConfig).find((configName) =>
-        configName.includes('-no-open'),
-      )
+  const rootStudyConfigKeys = Object.keys(rootStudyConfig);
+
+  const hasNoOpenParam = (
+    userArgs.find((entry) => entry.includes('-no-open')) 
+    ||
+    rootStudyConfigKeys.find((configName) =>
+      configName.includes('-no-open'),
     )
-  ) {
+  );
+
+  if ( !hasNoOpenParam ) {
     open(url);
   }
-});
+}).catch( error =>{
+
+  process.exit(1);
+
+})
