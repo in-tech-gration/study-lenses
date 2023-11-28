@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-/* this file is the entry point when launching `study` from the CLI */
+/* this file is the entry point when launching `lenses2` from the CLI */
 
 const fs          = require('fs');
 const path        = require('path');
@@ -8,8 +8,8 @@ const open        = require('open');
 
 process.env['NODE_CONFIG_DIR'] = path.join(__dirname, '..', 'config');
 
-const config = require('config');
-const { copyDir } = require('../server/lib/copyDir');
+const config       = require('config');
+const { copyDir }  = require('../server/lib/copyDir');
 const { emptyDir } = require('../server/lib/emptyDir');
 
 let rootStudyConfig = {};
@@ -20,6 +20,19 @@ try {
 try {
   rootStudyConfig = require(path.join(process.cwd(), 'lenses.json'));
 } catch (o_0) {}
+
+// HELPERS:
+/**
+ * @param {Object} object
+ * @param {string} key
+ * @return {any} value
+ * https://stackoverflow.com/a/47538066
+ */
+const getParameterCaseInsensitive = (object, key) => {
+  return object[
+    Object.keys(object).find((k) => k.toLowerCase() === key.toLowerCase())
+  ];
+};
 
 /* The user can optionally launch a sub-path from the directory they are in
   if they do this, localhost will still serve from the root of the directory
@@ -129,17 +142,6 @@ const cliLensSearch = process.argv.find((entry) => /--lens=[\d]*/i.test(entry));
 const cliLens =
   cliLensSearch !== undefined ? cliLensSearch.split('=')[1] : undefined;
 
-/**
- * @param {Object} object
- * @param {string} key
- * @return {any} value
- * https://stackoverflow.com/a/47538066
- */
-const getParameterCaseInsensitive = (object, key) => {
-  return object[
-    Object.keys(object).find((k) => k.toLowerCase() === key.toLowerCase())
-  ];
-};
 const rootStudyConfigPort = getParameterCaseInsensitive(
   rootStudyConfig,
   '--port',
@@ -166,7 +168,7 @@ const url = `http://localhost:${port}/${pathToOpen}${queryMarker}${
 }`;
 const helpUrl = `http://localhost:${port}?--help`;
 
-// launch the server
+// Load and launch the promisified server:
 const serverPromiseCloser = require('../server/index.js');
 
 serverPromiseCloser(port)
