@@ -3,28 +3,28 @@
 // start an express server, pretty standard stuff
 
 // dependencies & config ...
-const path = require('path');
-const fs = require('fs');
-const util = require('util');
+const path            = require('path');
+const fs              = require('fs');
+const util            = require('util');
 const readFilePromise = util.promisify(fs.readFile);
 
 process.env['NODE_CONFIG_DIR'] = path.join(__dirname, '..', 'config');
-const config = require('config');
+const config                   = require('config');
 
-const express = require('express');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
+const express      = require('express');
+const morgan       = require('morgan');
+const bodyParser   = require('body-parser');
 const cookieParser = require('cookie-parser');
-const marked = require('marked');
+const marked       = require('marked');
 
-const Logger = require('./lib/logger.js');
-const study = require('./study.js');
+const Logger    = require('./lib/logger.js');
+const study     = require('./study.js');
 const resetDemo = require('./reset-demo.js');
-const sandbox = require('./sandboxes/sandbox.js');
-const repl = require('./sandboxes/repl.js');
-const p5 = require('./sandboxes/p5.js');
-const tutor = require('./sandboxes/tutor.js');
-const logo = require('./sandboxes/logo.js');
+const sandbox   = require('./sandboxes/sandbox.js');
+const repl      = require('./sandboxes/repl.js');
+const p5        = require('./sandboxes/p5.js');
+const tutor     = require('./sandboxes/tutor.js');
+const logo      = require('./sandboxes/logo.js');
 
 // error and exit handling ...
 process.on('exit', function onExit(code) {
@@ -45,6 +45,61 @@ process.on('unhandledRejection', function onUnhandledPromise(e) {
   Logger.error('unhandledRejection', e);
   process.exit(99);
 });
+
+// HANDLERS:
+// if they requested a directory, send index.html or rendered README
+// otherwise fallback to static serving (so 404)
+// - should this stay?
+async function directoryServingHandler( req, res, next ){
+  // continue to static serving if it's not a directory
+  const absolutePath = path.join(process.cwd(), req.path);
+  const isDirectory  = fs.existsSync(absolutePath) && fs.lstatSync(absolutePath).isDirectory();
+
+  if (!isDirectory) {
+    next();
+    return;
+  }
+
+  // send index.html if there is one
+  const indexHtmlPath = path.join(absolutePath, 'index.html');
+  if (fs.existsSync(indexHtmlPath)) {
+    const indexHtml = await readFilePromise(indexHtmlPath, 'utf-8');
+    res.set('Content-Type', 'text/html');
+    res.status(200);
+    res.send(indexHtml);
+    return;
+  }
+
+  // render readme if there is one
+  const readmeMdPath = path.join(absolutePath, 'readme.md');
+  if (fs.existsSync(readmeMdPath)) {
+    const rawMarkdown = await readFilePromise(readmeMdPath, 'utf-8');
+    const renderedMarkdown = `
+      <!DOCTYPE html>
+        <html>
+        <head>
+          <link rel="stylesheet" href="shared_static_resources/gh-styles.css">
+          <link rel="stylesheet" href="shared_static_resources/prism/style.css">
+        </head>
+        <body>
+          <main class="markdown-body">${marked(rawMarkdown, {
+            baseUrl: `/../${req.path}/`,
+          })}</main>
+          <script src="shared_static_resources/prism/script.js"></script>
+        </body>
+      </html>`;
+    // in case it works by side-effect, reset for later
+
+    res.set('Content-Type', 'text/html');
+    res.status(200);
+    res.end(renderedMarkdown);
+    return;
+  }
+
+  // if there wasn't an index.html, SUMMARY.md, or README, go on to static serving
+  next();
+
+}
 
 // initialize express ...
 const app = express();
@@ -112,79 +167,27 @@ app.use(
   express.static(path.join(__dirname, '..', 'study_lenses_public')),
 );
 
-// if they requested a directory, send index.html or rendered README
-// otherwise fallback to static serving (so 404)
-// - should this stay?
-app.use(async (req, res, next) => {
-  // continue to static serving if it's not a directory
-  const absolutePath = path.join(process.cwd(), req.path);
-  const isDirectory =
-    fs.existsSync(absolutePath) && fs.lstatSync(absolutePath).isDirectory();
-  if (!isDirectory) {
-    next();
-    return;
-  }
-
-  // send index.html if there is one
-  const indexHtmlPath = path.join(absolutePath, 'index.html');
-  if (fs.existsSync(indexHtmlPath)) {
-    const indexHtml = await readFilePromise(indexHtmlPath, 'utf-8');
-    res.set('Content-Type', 'text/html');
-    res.status(200);
-    res.send(indexHtml);
-    return;
-  }
-
-  // render readme if there is one
-  const readmeMdPath = path.join(absolutePath, 'readme.md');
-  if (fs.existsSync(readmeMdPath)) {
-    const rawMarkdown = await readFilePromise(readmeMdPath, 'utf-8');
-    const renderedMarkdown = `
-      <!DOCTYPE html>
-        <html>
-        <head>
-          <link rel="stylesheet" href="shared_static_resources/gh-styles.css">
-          <link rel="stylesheet" href="shared_static_resources/prism/style.css">
-        </head>
-        <body>
-          <main class="markdown-body">${marked(rawMarkdown, {
-            baseUrl: `/../${req.path}/`,
-          })}</main>
-          <script src="shared_static_resources/prism/script.js"></script>
-        </body>
-      </html>`;
-    // in case it works by side-effect, reset for later
-
-    res.set('Content-Type', 'text/html');
-    res.status(200);
-    res.end(renderedMarkdown);
-    return;
-  }
-
-  // if there wasn't an index.html, SUMMARY.md, or README, go on to static serving
-  next();
-});
+app.use(directoryServingHandler);
 
 // all-time fallback - be a static server from cwd
 app.use(express.static(process.cwd()));
 
-// launch the app
-// to open browser after success
-const serverPromiseCloser = (PORT) =>
-  new Promise((resolve, reject) => {
-    app.listen(PORT, (err) => {
+// Promisified server launcher:
+const serverPromiseCloser = (port) => {
+
+  return new Promise((resolve, reject) => {
+    app.listen(port, (err) => {
+
       if (err) {
-        Logger.error(`Failed to start server on port: ${PORT}`, err);
-        process.exit(1);
+        Logger.error(`Failed to start server on port: ${port}`, err);
+        return reject(err);
       }
 
-      Logger.info(`Server started successfully on port: ${PORT}`);
+      Logger.info(`Server started successfully on port: ${port}`);
       resolve();
     });
   });
 
-module.exports = serverPromiseCloser;
+}
 
-/*
-  go to ./handle-request/index.js for the next step in your journey
-*/
+module.exports = serverPromiseCloser;
