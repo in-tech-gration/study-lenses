@@ -32,6 +32,8 @@ ul#directory {
   margin-left: 0;
   background: white;
   box-shadow: 0 20px 16px #00000020;
+  position: relative;
+  z-index: 100000;
 }
 
 .btn-simple {
