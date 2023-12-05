@@ -1,8 +1,8 @@
 # Study Lenses
 
 > You could read all the words below, or ...
-> <a href="./study_lenses_public/guide.mp4" target="_blank">watch this video</a>
-<!-- TODO: YouTube Version available: https://www.youtube.com/watch?v=5uCJBiQ7MkA -->
+
+- [Watch this video](https://www.youtube.com/watch?v=5uCJBiQ7MkA)
 
 To understand what's going on here the first thing to know is that you are using
 a _static server_, like the `liveServer` extension for Visual Studio Code. This
