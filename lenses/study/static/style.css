@@ -20,6 +20,7 @@
 
 .dropdown:hover .dropdown-content {
   display: block;
+  z-index: 100001;
 }
 
 .selection-buttons {
