@@ -27,7 +27,7 @@
     "astring": "^1.6.0",
     "body-parser": "^1.19.0",
     "comment-regex": "^1.0.1",
-    "config": "^3.3.3",
+    "config": "^4.1.1",
     "cookie-parser": "^1.4.5",
     "csso": "^4.2.0",
     "deepmerge": "^4.2.2",
